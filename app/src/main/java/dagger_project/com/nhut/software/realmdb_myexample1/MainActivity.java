@@ -10,6 +10,11 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+/*
+    Author : Thanh Nhut
+    Date   : July 2018
+ */
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
