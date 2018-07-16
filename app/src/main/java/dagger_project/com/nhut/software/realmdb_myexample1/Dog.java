@@ -8,7 +8,7 @@ public class Dog extends RealmObject {
     @PrimaryKey
     private int id;
     private String name;
-    private int age;
+    private Integer age;
 
     public int getId() {
         return id;
@@ -26,11 +26,11 @@ public class Dog extends RealmObject {
         this.name = name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
