@@ -33,38 +33,11 @@ public class MainActivity extends AppCompatActivity {
         updateAge = (Button) findViewById(R.id.updateage);
 
         rDB = new RealmDB(this);
-        Dog dog = new Dog();
-        dog.setId(rDB.getNewID(Dog.class, false));
-        dog.setName("Rex");
-        dog.setAge(1);
-
-        Dog dog1 = new Dog();
-        dog1.setId(rDB.getNewID(Dog.class, false));
-        dog1.setName("Alaska");
-        dog1.setAge(3);
-
-        Dog dog2 = new Dog();
-        dog2.setId(rDB.getNewID(Dog.class, false));
-        dog2.setName("TRex");
-        dog2.setAge(4);
-
-        Dog dog5 = new Dog();
-        dog5.setId(rDB.getNewID(Dog.class, false));
-        dog5.setName("TRex1");
-        dog5.setAge(5);
-
-        Dog dog4 = new Dog();
-        dog4.setId(rDB.getNewID(Dog.class, false));
-        dog4.setName("TRex2");
-        dog4.setAge(6);
-
-        List<Dog> listDogs = Arrays.asList(dog, dog1, dog2);
-
-        rDB.deleteAll(); // clean DB
-        rDB.insert(dog4);
-        rDB.insert(dog5);
-        rDB.insert(listDogs);
-        showData();
+        rDB.delete(Cat.class);
+        Cat c1 = new Cat(rDB.getNewID(Cat.class, false),"Kathy", 2, Cat.FEMALE);
+        Cat c2 = new Cat(rDB.getNewID(Cat.class, false),"Jo", 3, Cat.MALE);
+        rDB.insert(c1); rDB.insert(c2);
+        showData(Cat.class);
 
         updateName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Update name", Toast.LENGTH_SHORT).show();
                 rDB.updateRow(Dog.class, "name", nameet.getText().toString(),
                     new String[] {"name"}, new String[] {nnameet.getText().toString()});
-                showData();
+                showData(Cat.class);
             }
         });
         updateAge.setOnClickListener(new View.OnClickListener() {
@@ -81,15 +54,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Update age", Toast.LENGTH_SHORT).show();
                 rDB.updateRow(Dog.class, "name", nameet.getText().toString(),
                     new String[] {"age"}, new Integer[] {(int)(Math.random() * 10)});
-                showData();
+                showData(Cat.class);
             }
         });
     }
 
-    void showData() {
-        List<Dog> list = rDB.getAllData(Dog.class);
+    <T> void showData(T t) {
+        List<T> list = rDB.getAllData(t.getClass());
         table.setText("Result \n");
-        for (Dog d : list) table.append(d.toString());
+        for (T tt : list) table.append(tt.toString());
     }
 
 /*

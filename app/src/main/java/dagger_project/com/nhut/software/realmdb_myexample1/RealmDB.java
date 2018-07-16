@@ -10,16 +10,22 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
 public class RealmDB {
     private Realm realm;
+    private RealmConfiguration config;
     private int cindex;
 
     public RealmDB(Context context) {
         Realm.init(context);
-        realm = Realm.getDefaultInstance();
+        config = new RealmConfiguration
+            .Builder()
+            .deleteRealmIfMigrationNeeded()
+            .build();
+        realm = Realm.getInstance(config);
         cindex = -1;
     }
 
@@ -29,8 +35,10 @@ public class RealmDB {
             int index = (n == null) ? 0 : n.intValue() + 1;
             Log.i("MyTag", "index " + index);
             return index;
-        } else
-            return ++cindex;
+        } else {
+            Log.i("MyTag", "index " + ++cindex);
+            return cindex;
+        }
     }
 
     public void insert(RealmModel rm) {
@@ -104,14 +112,12 @@ public class RealmDB {
     }
 
     public void delete(Class<? extends RealmModel> obj) {
+        realm.beginTransaction();
         realm.delete(obj);
+        realm.commitTransaction();
     }
 
     public Realm getRealm() {
         return realm;
-    }
-
-    public void newfuntion() {
-
     }
 }
