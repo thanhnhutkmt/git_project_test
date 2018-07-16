@@ -110,4 +110,8 @@ public class RealmDB {
     public Realm getRealm() {
         return realm;
     }
+
+    public void newfuntion() {
+
+    }
 }
