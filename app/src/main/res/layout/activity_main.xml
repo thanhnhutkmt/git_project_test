@@ -36,4 +36,9 @@
         android:layout_height="wrap_content"
         android:text="update age" />
 
+    <Button
+        android:id="@+id/showDogList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Dog List" />
 </LinearLayout>

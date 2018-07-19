@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
@@ -26,6 +27,12 @@ public class RealmDB {
             .deleteRealmIfMigrationNeeded()
             .build();
         realm = Realm.getInstance(config);
+        realm.addChangeListener(new RealmChangeListener<Realm>() {
+            @Override
+            public void onChange(Realm realm) {
+                Log.i("MyTag", "Changed");
+            }
+        });
         cindex = -1;
     }
 
@@ -104,7 +111,16 @@ public class RealmDB {
         } else return null;
     }
 
-    public <T> List<T> getAllData(Class cl) {
+    public List getAllData() {
+        List l = new ArrayList<>();
+        RealmResults rr = realm.where(Cat.class).findAll();
+        for (Object t : rr.subList(0, rr.size())) l.add(t);
+        rr = realm.where(Dog.class).findAll();
+        for (Object t : rr.subList(0, rr.size())) l.add(t);
+        return l;
+    }
+
+    public <T> List<T> getTableData(Class cl) {
         RealmResults<T> pups = realm.where(cl).findAll();
         List<T> l = new ArrayList<>();
         for (T t : pups.subList(0, pups.size())) l.add(t);

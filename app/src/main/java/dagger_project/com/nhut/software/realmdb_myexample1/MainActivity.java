@@ -19,7 +19,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     TextView table;
     EditText nameet, nnameet;
-    Button updateName, updateAge;
+    Button updateName, updateAge, showDogList;
     RealmDB rDB;
 
     @Override
@@ -31,9 +31,12 @@ public class MainActivity extends AppCompatActivity {
         nnameet = (EditText) findViewById(R.id.nname);
         updateName = (Button) findViewById(R.id.updatename);
         updateAge = (Button) findViewById(R.id.updateage);
+        updateAge = (Button) findViewById(R.id.updateage);
+        showDogList = (Button) findViewById(R.id.showDogList);
 
         rDB = new RealmDB(this);
-        rDB.delete(Cat.class);
+        rDB.deleteAll();
+//        rDB.delete(Cat.class);
         Cat c1 = new Cat(rDB.getNewID(Cat.class, false),"Kathy", 2, Cat.FEMALE);
         Cat c2 = new Cat(rDB.getNewID(Cat.class, false),"Jo", 3, Cat.MALE);
         rDB.insert(c1); rDB.insert(c2);
@@ -43,26 +46,51 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Update name", Toast.LENGTH_SHORT).show();
-                rDB.updateRow(Dog.class, "name", nameet.getText().toString(),
+                rDB.updateRow(Cat.class, "name", nameet.getText().toString(),
                     new String[] {"name"}, new String[] {nnameet.getText().toString()});
-                showData(Cat.class);
+                showAll();
             }
         });
         updateAge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Update age", Toast.LENGTH_SHORT).show();
-                rDB.updateRow(Dog.class, "name", nameet.getText().toString(),
+                rDB.updateRow(Cat.class, "name", nameet.getText().toString(),
                     new String[] {"age"}, new Integer[] {(int)(Math.random() * 10)});
-                showData(Cat.class);
+                showAll();
+            }
+        });
+
+        showDogList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dog dog = new Dog();
+                dog.setId(rDB.getNewID(Dog.class, true));
+                dog.setName("Rex");
+                dog.setAge(1);
+                rDB.insert(dog);
+
+                Dog dog1 = new Dog();
+                dog1.setId(rDB.getNewID(Dog.class, true));
+                dog1.setName("Alaska");
+                dog1.setAge(3);
+                rDB.insert(dog1);
+
+                showAll();
             }
         });
     }
 
-    <T> void showData(T t) {
-        List<T> list = rDB.getAllData(t.getClass());
+    void showData(Class c) {
+        List list = rDB.getTableData(c);
         table.setText("Result \n");
-        for (T tt : list) table.append(tt.toString());
+        for (Object tt : list) table.append(tt.toString());
+    }
+
+    void showAll() {
+        List list = rDB.getAllData();
+        table.setText("Result \n");
+        for (Object tt : list) table.append(tt.toString());
     }
 
 /*
